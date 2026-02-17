@@ -1,5 +1,6 @@
 require 'pry'
 require './lib/dmv'
+require './lib/registrant'
 require './lib/facility'
 require './lib/vehicle'
 require './lib/dmv_data_service'
