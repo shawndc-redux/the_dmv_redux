@@ -156,9 +156,46 @@ RSpec.describe Facility do
         expect(@registrant_1.license_data).to eq({:written=>true, :license=>true, :renewed=>false}) 
         
         @facility_1.administer_road_test(@registrant_2)
-
+        
         expect(@registrant_2.license_data).to eq({:written=>true, :license=>true, :renewed=>false}) 
       end 
+    end
+    
+    describe '#renew license' do
+      before(:each) do
+        @facility_1.add_service('Written Test')
+        @facility_1.add_service('Road Test')
+        @registrant_2.earn_permit
+        @facility_1.administer_written_test(@registrant_2)
+        @facility_1.administer_written_test(@registrant_1)
+        @facility_1.administer_road_test(@registrant_1)
+        @facility_1.administer_road_test(@registrant_2)      
+      end
+      
+      it 'can renew a drivers license' do
+        expect(@registrant_1.license_data).to eq({:written=>true, :license=>true, :renewed=>false}) 
+        expect(@registrant_2.license_data).to eq({:written=>true, :license=>true, :renewed=>false}) 
+        
+        @facility_1.renew_drivers_license(@registrant_1)
+        
+        expect(@registrant_1.license_data).to eq({:written=>true, :license=>true, :renewed=>false}) 
+        
+        @facility_1.add_service('Renew License')     
+        @facility_1.renew_drivers_license(@registrant_1)
+        
+        expect(@registrant_1.license_data).to eq({:written=>true, :license=>true, :renewed=>true}) 
+      end
+      
+      it 'checks that a driver has a license before renewing' do
+        @facility_1.add_service('Renew License')     
+        @facility_1.renew_drivers_license(@registrant_3)
+        
+        expect(@registrant_3.license_data).to eq({:written=>false, :license=>false, :renewed=>false}) 
+        
+        @facility_1.renew_drivers_license(@registrant_2)
+        
+        expect(@registrant_2.license_data).to eq({:written=>true, :license=>true, :renewed=>true}) 
+      end
     end
   end
 end
