@@ -25,13 +25,13 @@ RSpec.describe FacilityFactory do
     end
 
     it 'can make missouri facilities' do
-      # factory = FacilityFactory.new
-      # factory.create_facilities(mo_dmv_office_locations)
+      factory = FacilityFactory.new
+      mo_dmv_office_locations = DmvDataService.new.mo_dmv_office_locations
+      factory.create_facilities(mo_dmv_office_locations)
 
-      # factory.facilities.each do |facility|
-      #   expect(facility).to be_an_instance_of(Facility)
-      # end
-      # mo_dmv_office_locations = DmvDataService.new.mo_dmv_office_locations
+      factory.facilities.each do |facility|
+        expect(facility).to be_an_instance_of(Facility)
+      end
     end
   end
 end
