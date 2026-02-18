@@ -93,5 +93,20 @@ RSpec.describe Facility do
       
       expect(@registrant_1.license_data).to eq({:written=>true, :license=>false, :renewed=>false}) 
     end
+    
+    it 'checks that registrant has a permit before administering written test' do
+      expect(@registrant_2.age).to eq 16
+      expect(@registrant_2.permit?).to eq false
+      
+      @facility_1.add_service('Written Test')
+      @facility_1.administer_written_test(@registrant_2)
+
+      expect(@registrant_2.license_data).to eq({:written=>false, :license=>false, :renewed=>false}) 
+      
+      @registrant_2.earn_permit
+      @facility_1.administer_written_test(@registrant_2)
+      
+      expect(@registrant_2.license_data).to eq({:written=>true, :license=>false, :renewed=>false}) 
+    end
   end
 end
